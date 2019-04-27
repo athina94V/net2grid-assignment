@@ -1,0 +1,12 @@
+
+    {
+      "require": {
+          "videlalvaro/php-amqplib": "2.2.*"
+      },
+	  
+	  
+    "require": {
+        "php-amqplib/php-amqplib": ">=2.6.1"
+    
+}
+    }
