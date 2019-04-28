@@ -27,10 +27,9 @@ $channel->exchange_declare($exchange_name, $exchange_types, false, true, false);
 list ($queue_name,, ) = $channel->queue_declare($queue_name, false, true, false, false, false, $ttl);
 $binding_key = '#.#.#.#.#';
 
-    $channel->queue_bind($queue_name, 'results', $binding_key);
+$channel->queue_bind($queue_name, 'results', $binding_key);
 
 //$channel->queue_bind($queue_name, 'results');
-
 //$channel->queue_declare($queue_name, false, true, false, false, false, $ttl);
 //ini_set('max_execution_time', 0);
 echo " [*] Waiting for messages. To exit press CTRL+C\n";
