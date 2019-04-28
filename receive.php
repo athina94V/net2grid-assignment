@@ -10,7 +10,9 @@ $port = 5672;
 $username = 'candidate';
 $password = 'efn[bjz*SV,~tw/r7=';
 
-//$queue_name = 'raw_results';
+$exchange_name = 'results';
+$exchange_type = 'topic';
+$queue_name = 'raw_results';
 $ttl = new AMQPTable(["x-message-ttl" => 3600000,]);
 
 $connection = new AMQPStreamConnection($hostname, $port, $username, $password);
@@ -21,8 +23,8 @@ $channel = $connection->channel();
 //    print_r("it worked");
 //}
 
-$channel->exchange_declare('results', 'topic', false, true, false);
-list ($queue_name,, ) = $channel->queue_declare('raw_results', false, true, false, false, false, $ttl);
+$channel->exchange_declare($exchange_name, $exchange_types, false, true, false);
+list ($queue_name,, ) = $channel->queue_declare($queue_name, false, true, false, false, false, $ttl);
 $binding_key = '#.#.#.#.#';
 
     $channel->queue_bind($queue_name, 'results', $binding_key);
