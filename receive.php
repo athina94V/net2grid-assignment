@@ -10,23 +10,34 @@ $port = 5672;
 $username = 'candidate';
 $password = 'efn[bjz*SV,~tw/r7=';
 
-$queue_name = 'raw_results';
+//$queue_name = 'raw_results';
 $ttl = new AMQPTable(["x-message-ttl" => 3600000,]);
 
 $connection = new AMQPStreamConnection($hostname, $port, $username, $password);
 $channel = $connection->channel();
+//$test = $connection->isConnected();
+//
+//if ($test) {
+//    print_r("it worked");
+//}
 
-$channel->queue_declare($queue_name, false, true, false, false, false, $ttl);
+$channel->exchange_declare('results', 'topic', false, true, false);
+list ($queue_name,, ) = $channel->queue_declare('raw_results', false, true, false, false, false, $ttl);
+$binding_key = '#.#.#.#.#';
 
+    $channel->queue_bind($queue_name, 'results', $binding_key);
+
+//$channel->queue_bind($queue_name, 'results');
+
+//$channel->queue_declare($queue_name, false, true, false, false, false, $ttl);
+//ini_set('max_execution_time', 0);
 echo " [*] Waiting for messages. To exit press CTRL+C\n";
 $callback = function ($msg) {
-    echo ' [x] Received ', $msg->body, "\n";
-    sleep(substr_count($msg->body, '.'));
-    echo " [x] Done\n";
-    $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
+    echo ' [x] ', $msg->delivery_info['routing_key'], ':', $msg->body, "\n";
 };
 $channel->basic_consume($queue_name, '', false, true, false, false, $callback);
-
+//$msg = $channel->basic_get($queue_name);
+//echo $msg;
 while (count($channel->callbacks)) {
     $channel->wait();
 }

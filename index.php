@@ -1,28 +1,16 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title></title>
-    </head>
-    <body>
-        <?php
-        require __DIR__ . "\convertValues.php";
-        $url = "https://zl04pypnbk.execute-api.eu-west-1.amazonaws.com/prod/results";
+<?php
+require __DIR__ . "\convertValues.php";
+$url = "https://zl04pypnbk.execute-api.eu-west-1.amazonaws.com/prod/results";
 
-        $response = file_get_contents($url);
-        $response = json_decode($response);
+$response = file_get_contents($url);
+$response = json_decode($response);
 
 
-        print_r($response);
+print_r($response);
 
-        $routing_keys = convertValues::convertValue($response);
+$routing_keys = convertValues::convertValue($response);
 
-        print_r("$routing_keys");
+print_r("$routing_keys");
 
 
 //// Create connection
@@ -50,6 +38,4 @@ and open the template in the editor.
 //        while ($row = mysqli_fetch_array($databases)) {
 //            print_r($row[0] . "\n");
 //        }
-        ?>
-    </body>
-</html>
+

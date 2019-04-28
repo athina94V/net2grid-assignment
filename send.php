@@ -25,7 +25,7 @@ $msg = array('value' => 141673, 'timestamp' => 155626955025);
 $msg = implode('', array_slice($msg, 0));
 $msg = new AMQPMessage($msg);
 
-$routing_key = "9574384527443017728.260.11.1794.0";
+$routing_key = '9574384527443017728.260.11.1794.0';
 $channel->basic_publish($msg, 'results', $routing_key);
 
 
