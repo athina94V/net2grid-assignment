@@ -1,16 +1,15 @@
 <?php
-require __DIR__ . "\convertValues.php";
-$url = "https://zl04pypnbk.execute-api.eu-west-1.amazonaws.com/prod/results";
+
+require __DIR__ . '\send.php';
+$url = 'https://zl04pypnbk.execute-api.eu-west-1.amazonaws.com/prod/results';
 
 $response = file_get_contents($url);
 $response = json_decode($response);
 
 
-print_r($response);
 
-$routing_keys = convertValues::convertValue($response);
 
-print_r("$routing_keys");
+send::sendMessage($response);
 
 
 //// Create connection

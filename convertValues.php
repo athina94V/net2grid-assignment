@@ -1,5 +1,7 @@
 <?php
 
+use PhpAmqpLib\Message\AMQPMessage;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -24,6 +26,14 @@ class convertValues {
         $attributeId = hexdec($response->attributeId);
 
         return "$gatewayEui.$profileId.$endpointId.$clusterId.$attributeId";
+    }
+
+    public static function prepareMessage($response) {
+        $msg = array('value' => $response->value, 'timestamp' => $response->timestamp);
+        $msg = implode('', array_slice($msg, 0));
+        $msg = new AMQPMessage($msg);
+        
+        return $msg;
     }
 
 }
