@@ -1,6 +1,7 @@
 <?php
 
 require __DIR__ . '\send.php';
+require __DIR__ . '\receive.php';
 $url = 'https://zl04pypnbk.execute-api.eu-west-1.amazonaws.com/prod/results';
 
 $response = file_get_contents($url);
@@ -10,6 +11,7 @@ $response = json_decode($response);
 
 
 send::sendMessage($response);
+receive::receiveMessage();
 
 
 //// Create connection
