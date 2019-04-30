@@ -8,17 +8,17 @@ use PhpAmqpLib\Connection\AMQPStreamConnection;
 class receive {
 
     public static function receiveMessage() {
-        $hostname = 'candidatemq.n2g-dev.net';
-        $port = 5672;
-        $username = 'candidate';
-        $password = 'efn[bjz*SV,~tw/r7=';
+        global $test;
+        $ini_array = parse_ini_file("config.ini");
+        $message_queue = $ini_array[message_queue];
+        $database_details = $ini_array[database_details];
 
         $exchange_name = 'results';
         $exchange_type = 'topic';
         $queue_name = 'raw_results';
         $ttl = new AMQPTable(["x-message-ttl" => 3600000,]);
 
-        $connection = new AMQPStreamConnection($hostname, $port, $username, $password);
+        $connection = new AMQPStreamConnection($message_queue[hostname], $message_queue[port], $message_queue[username], $message_queue[password]);
         $channel = $connection->channel();
 
 
@@ -33,31 +33,34 @@ class receive {
         $callback = function ($msg) {
             echo ' [x] ', $msg->delivery_info['routing_key'], ':', $msg->body, "\n";
 
-            $servername = "localhost";
-            $username = "root";
-            $password = "";
-            $dbname = "test";
-
-            // Create connection
-            $conn = new mysqli($servername, $username, $password, $dbname, 3306);
-            $length = strlen ($msg->body);
-            $test = str_split($msg->body, $length-13);
-            $value = substr($msg->body, 0, $length-13);
-            $timestamp = substr($msg->body, $length-13);
-            $sql = "INSERT INTO results (timestamp, value) VALUES('$timestamp', '$value')";
-            if ($conn->query($sql) === TRUE) {
-                echo "New record  successfully";
-            } else {
-                echo "Error creating row " . $conn->error;
-            }
-            $conn->close();
+            receive::insertRecord($msg);
+            
         };
         $channel->basic_consume($queue_name, '', false, true, false, false, $callback);
-        while (count($channel->callbacks)) {
+
+        if (count($channel->callbacks)) {
             $channel->wait();
         }
         $channel->close();
         $connection->close();
+    }
+
+    public static function insertRecord($msg) {
+        $properties = parse_ini_file('config.ini');
+        $database_details = $properties[database_details];
+
+        $conn = new mysqli($database_details[servername], $database_details[username], $database_details[password], $database_details[dbname], 3306);
+
+
+        $value = substr($msg->body, 0, ($msg->size) - 13);
+        $timestamp = substr($msg->body, ($msg->size) - 13);
+        $sql = "INSERT INTO results (timestamp, value) VALUES('$timestamp', '$value')";
+        if ($conn->query($sql) === TRUE) {
+            echo "New record  successfully";
+        } else {
+            echo "Error creating row " . $conn->error;
+        }
+        $conn->close();
     }
 
 }
