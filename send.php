@@ -9,15 +9,12 @@ use PhpAmqpLib\Wire\AMQPTable;
 
 class send {
 
-    public static function sendMessage($response) {
-        $ini_array = parse_ini_file("config.ini");
-        $message_queue = $ini_array[message_queue];
-
-
+    public static function sendMessage($response, $message_queue) {
+       
         $exchange_name = 'results';
         $exchange_type = 'topic';
 
-        $connection = new AMQPStreamConnection($message_queue[hostname], $message_queue[port], $message_queue[username], $message_queue[password]);
+        $connection = new AMQPStreamConnection($message_queue['hostname'], $message_queue['port'], $message_queue['username'], $message_queue['password']);
         $channel = $connection->channel();
 
         $channel->exchange_declare($exchange_name, $exchange_type, false, true, false);
