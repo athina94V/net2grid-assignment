@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 }
 
 // sql to create table
-$sql = "CREATE TABLE results (
+$sql = "CREATE TABLE IF NOT EXISTS results (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 timestamp BIGINT(13) NOT NULL,
 value INT(7) NOT NULL
@@ -25,4 +25,3 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $conn->close();
-?> 

@@ -31,6 +31,7 @@ class convertValues {
     public static function prepareMessage($response) {
         $msg = array('value' => $response->value, 'timestamp' => $response->timestamp);
         $msg = implode('', array_slice($msg, 0));
+        echo "MSG->$msg";
         $msg = new AMQPMessage($msg);
         
         return $msg;
