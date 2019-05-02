@@ -1,4 +1,9 @@
  <?php
+ /**
+  * Create table in DB to store messages
+  * 
+  * If connection is not established or table cannot be created exits
+  */
 $servername = "localhost";
 $username = "root";
 $password = "";

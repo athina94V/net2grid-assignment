@@ -1,10 +1,20 @@
 <?php
-
+/**
+ * Class contains functions to send, receive and store messages
+ */
 require_once __DIR__ . '\convertValues.php';
 
 
 class message {
-
+    
+    /**
+    * Send message to exchange
+    * 
+    *
+    * @param string $response
+    * @param type $channel
+    */
+    
     public static function sendMessage($response, $channel) {
 
         $routing_key = convertValues::convertValue($response);
@@ -12,7 +22,13 @@ class message {
 
         $channel->basic_publish($msg, 'results', $routing_key);
     }
-
+    
+    /**
+     * Receive message from queue
+     * 
+     * @param type $channel
+     */
+    
     public static function receiveMessage($channel) {
 
         $exchange_name = 'results';
@@ -33,7 +49,14 @@ class message {
             $channel->wait();
         }
     }
-
+    
+    /**
+     * Insert message to table in DB
+     * 
+     * @param string $msg
+     * @throws Exception If msg is not numeric
+     */
+    
     public static function insertRecord($msg) {
         $properties = parse_ini_file('config.ini');
         $database_details = $properties['database_details'];

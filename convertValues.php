@@ -2,32 +2,37 @@
 
 use PhpAmqpLib\Message\AMQPMessage;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of convertValues
- *
- * @author Athina
+ * 
  */
 class convertValues {
 
-    //put your code here
+/**
+ * Convert values from hex to dec and prepare routing key
+ * 
+ * @param object $response
+ * @return string $routing_key
+ */  
 
     public static function convertValue($response) {
-        $gatewayEui = hexdec($response->gatewayEui);
-        $gatewayEui = number_format($gatewayEui, 0, '', '');
-        $profileId = hexdec($response->profileId);
-        $endpointId = hexdec($response->endpointId);
-        $clusterId = hexdec($response->clusterId);
-        $attributeId = hexdec($response->attributeId);
+        
+        $gateway_eui = hexdec($response->gatewayEui);
+        $gateway_eui = number_format($gateway_eui, 0, '', '');
+        $profile_id = hexdec($response->profileId);
+        $endpoint_id = hexdec($response->endpointId);
+        $cluster_id = hexdec($response->clusterId);
+        $attribute_id = hexdec($response->attributeId);
 
-        return "$gatewayEui.$profileId.$endpointId.$clusterId.$attributeId";
+        $routing_key = $gatewayEui.$profileId.$endpointId.$clusterId.$attributeId;
+        return $routing_key;
     }
-
+/**
+ * convert message to an AMQP format
+ * 
+ * @param object $response
+ * @return AMQPMessage $msg
+ */
+    
     public static function prepareMessage($response) {
         $msg = array('value' => $response->value, 'timestamp' => $response->timestamp);
         $msg = implode('', array_slice($msg, 0));
