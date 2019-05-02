@@ -6,8 +6,8 @@ require_once __DIR__ . '\message.php';
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Wire\AMQPTable;
 
-$ini_array = parse_ini_file('config.ini');
-$message_queue = $ini_array['message_queue'];
+$credentials = parse_ini_file('config.ini');
+$message_queue = $credentials['message_queue'];
 
 $url = 'https://zl04pypnbk.execute-api.eu-west-1.amazonaws.com/prod/results';
 

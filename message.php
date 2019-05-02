@@ -51,10 +51,10 @@ class Message {
      * @param string $msg
      */
     public static function insertRecord($msg) {
-        $properties = parse_ini_file('config.ini');
-        $database_details = $properties['database_details'];
+        $credentials = parse_ini_file('config.ini');
+        $database_info = $credentials['database_details'];
 
-        $conn = new mysqli($database_details['servername'], $database_details['username'], $database_details['password'], $database_details['dbname']);
+        $conn = new mysqli($database_info['servername'], $database_info['username'], $database_info['password'], $database_info['dbname']);
 
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);

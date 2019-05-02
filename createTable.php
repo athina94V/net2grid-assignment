@@ -5,8 +5,8 @@
  *
  * If connection is not established or table cannot be created exits
  */
-$properties = parse_ini_file('config.ini');
-$database_info = $properties['database_details'];
+$credentials = parse_ini_file('config.ini');
+$database_info = $credentials['database_details'];
 
 
 $conn = new mysqli($database_info['servername'], $database_info['username'], $database_info['password'], $database_info['dbname']);
