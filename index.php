@@ -28,7 +28,6 @@ while (1) {
     $response = file_get_contents($ini_array['hostname']);
     $response = json_decode($response);
 
-
     Message::sendMessage($response, $channel);
     Message::receiveMessage($channel);
 }
