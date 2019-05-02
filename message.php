@@ -10,7 +10,6 @@ class Message {
     /**
      * Send message to exchange
      * 
-     *
      * @param string $response
      * @param type $channel
      */
@@ -33,9 +32,7 @@ class Message {
         $exchange_type = 'topic';
         $queue_name = 'raw_results';
 
-
         $channel->exchange_declare($exchange_name, $exchange_type, false, true, false);
-
 
         $callback = function ($msg) {
             Message::insertRecord($msg);
