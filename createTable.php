@@ -1,22 +1,21 @@
- <?php
- /**
-  * Create table in DB to store messages
-  * 
-  * If connection is not established or table cannot be created exits
-  */
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "test";
+<?php
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname, 3306);
-// Check connection
+/**
+ * Create table in DB to store messages
+ *
+ * If connection is not established or table cannot be created exits
+ */
+$properties = parse_ini_file('config.ini');
+$database_info = $properties['database_details'];
+
+
+$conn = new mysqli($database_info['servername'], $database_info['username'], $database_info['password'], $database_info['dbname']);
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// sql to create table
+
 $sql = "CREATE TABLE IF NOT EXISTS results (
 id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 timestamp BIGINT(13) NOT NULL,
@@ -24,7 +23,7 @@ value INT(7) NOT NULL
 )";
 
 if ($conn->query($sql) === TRUE) {
-    echo "Table rawResults created successfully";
+    echo "Table results created successfully";
 } else {
     echo "Error creating table: " . $conn->error;
 }
